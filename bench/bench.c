@@ -9,9 +9,9 @@
 #include <mach/mach_time.h>
 #endif
 
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include <lua5.2/lua.h>
+#include <lua5.2/lualib.h>
+#include <lua5.2/lauxlib.h>
 
 #include "timeout.h"
 #include "bench.h"
