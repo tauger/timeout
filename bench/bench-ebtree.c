@@ -2,13 +2,8 @@
  * ebtree from haproxy.
  * ==========================================================================
  */
-#ifndef EBTREE_H
-#define EBTREE_H
-
-#endif /* EBTREE_H */
-
-
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "timeout.h"
 #include "bench.h"
@@ -16,7 +11,7 @@
 #include "eb32tree.h"
 
 struct ebtimeout {
-	struct eb32_node tq;/* ebtree node used to hold the timer in the timer queue */
+	struct eb32_node node;/* ebtree node used to hold the timer in the timer tree */
 	timeout_t expires;
 };
 
@@ -61,8 +56,9 @@ static void add(void *ctx, struct timeout *_to, timeout_t expires) {
 	struct ebtimeout *to = (void *)_to;
 
 	to->expires = T->curtime + expires;
-	to->tq.key = to->expires;
-	eb32_insert(&T->root, &to->tq);
+	to->node.key = to->expires;
+	eb32_insert(&T->root, &to->node);
+	//fprintf(stdout, "insert a timer with expires %lu\n", to->expires);
 } /* add() */
 
 
@@ -70,7 +66,7 @@ static void del(void *ctx, struct timeout *_to) {
 	//struct ebtimeouts *T = ctx;
 	struct ebtimeout *to = (void *)_to;
 
-	eb32_delete(&to->tq);
+	eb32_delete(&to->node);
 	to->expires = 0;
 } /* del() */
 
@@ -82,10 +78,10 @@ static struct timeout *get(void *ctx) {
 	struct eb32_node *n = eb32_lookup_le(&T->root, T->curtime);
 
 	if (n) {
-		// find the 
-		to = container_of(n, struct ebtimeout, tq);
+		to = container_of(n, struct ebtimeout, node);
+		//fprintf(stdout, "current time: %lu should be greater than expires: %lu\n", T->curtime, to->expires);
 		to->expires = 0;
-		eb32_delete(&to->tq);
+		eb32_delete(&to->node);
 
 		return (void *)to;
 	}

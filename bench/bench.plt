@@ -17,7 +17,7 @@ plot 'heap-del.dat' using 1:($2*1000000) title "min-heap" with lines ls 1 lw 3 l
      'ebtree-del.dat' using 1:($2*1000000) title "ebtree" with lines ls 1 lw 3 lc "black", \
      'wheel-del.dat' using 1:($2*1000000) title "hierarchical wheel" with lines ls 1 lw 3 lc "forest-green"
 
-set title "Time spent expiring timeouts\n(by iteratively updating clock ~1000 times)" font ",20"
+set title "Time spent expiring timeouts\n(by iteratively updating clock 1000 times)" font ",20"
 plot 'heap-expire.dat' using 1:($2*1000000) title "min-heap" with lines ls 1 lw 3 lc "red", \
      'llrb-expire.dat' using 1:($2*1000000) title "llrb" with lines ls 1 lw 3 lc "blue", \
      'ebtree-expire.dat' using 1:($2*1000000) title "ebtree" with lines ls 1 lw 3 lc "black", \
